@@ -1,5 +1,4 @@
-import './App.css';
-
+import { TaskList } from './components/TaskList';
 export const App = () => {
-	return <div className="App"></div>;
+	return <TaskList />;
 };
