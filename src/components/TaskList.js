@@ -5,6 +5,7 @@ export const TaskList = () => {
 	const [inputValue, setInputValue] = useState();
 	const [isLoading, setIsLoading] = useState(false);
 	const [isCreating, setIsCreating] = useState(false);
+	const [isDeleting, setIsDeleting] = useState(false);
 	const [refreshTasks, setRefreshTasks] = useState(false);
 	useEffect(() => {
 		setIsLoading(true);
@@ -25,7 +26,7 @@ export const TaskList = () => {
 			headers: { 'Content-Type': 'application/json;charset=utf-8' },
 			body: JSON.stringify({
 				userId: '1',
-				id: nextId,
+				id: String(nextId),
 				title: inputValue,
 				completed: false,
 			}),
@@ -36,6 +37,19 @@ export const TaskList = () => {
 				setRefreshTasks(!refreshTasks);
 			})
 			.finally(() => setIsCreating(false));
+	};
+	const requestDeleteTask = (target) => {
+		setIsDeleting(true);
+		console.log(target.id);
+		fetch(`http://localhost:3004/tasks/${target.id}/`, {
+			method: 'DELETE',
+		})
+			.then((rawResponse) => rawResponse.json())
+			.then((response) => {
+				console.log('ответ сервера: ', response);
+				setRefreshTasks(!refreshTasks);
+			})
+			.finally(() => setIsDeleting(false));
 	};
 	return (
 		<div className={styles.container}>
@@ -58,11 +72,22 @@ export const TaskList = () => {
 				) : (
 					tasks.map((item) => (
 						<li key={item.id}>
-							<button id={item.id}>X</button> {item.title}
+							<button
+								className={styles.delBtn}
+								id={item.id}
+								disabled={isDeleting}
+								onClick={({ target }) => requestDeleteTask(target)}
+							>
+								X
+							</button>{' '}
+							{item.title}
 						</li>
 					))
 				)}
 			</ul>
+			<div>
+				<button>Sort</button>
+			</div>
 		</div>
 	);
 };
