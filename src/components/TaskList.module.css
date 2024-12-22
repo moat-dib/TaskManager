@@ -19,6 +19,10 @@
 		transform: rotate(360deg);
 	}
 }
+.container {
+	margin-left: 33%;
+	width: 33%;
+}
 /* Удалите поля и отступы из списка */
 .list {
 	margin: 0;
@@ -88,7 +92,7 @@
 
 /* Стиль заголовка */
 .header {
-	background-color: #f44336;
+	background-color: #078680;
 	padding: 30px 40px;
 	color: white;
 	text-align: center;
@@ -106,7 +110,7 @@ input {
 	margin: 0;
 	border: none;
 	border-radius: 0;
-	width: 75%;
+	width: 60%;
 	padding: 10px;
 	float: left;
 	font-size: 16px;

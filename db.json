@@ -1,0 +1,46 @@
+{
+  "tasks": [
+    {
+      "userId": 1,
+      "id": "1",
+      "title": "read this list",
+      "completed": false
+    },
+    {
+      "userId": 1,
+      "id": "2",
+      "title": "read about JSON placeholder",
+      "completed": false
+    },
+    {
+      "userId": 1,
+      "id": "3",
+      "title": "install json server and use it",
+      "completed": false
+    },
+    {
+      "userId": 1,
+      "id": "4",
+      "title": "install firebase and use it",
+      "completed": true
+    },
+    {
+      "userId": 1,
+      "id": "5",
+      "title": "read about user hooks",
+      "completed": false
+    },
+    {
+      "id": 6,
+      "userId": "1",
+      "title": "dgdgfg",
+      "completed": false
+    },
+    {
+      "id": 7,
+      "userId": "1",
+      "title": "dgdgfgjj",
+      "completed": false
+    }
+  ]
+}
