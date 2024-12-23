@@ -1,85 +1,40 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useRequestGetTasks } from './useRequestGetTasks';
+import { useRequestAddTask } from './useRequestAddTask';
+import { ref, set, remove } from 'firebase/database';
+import { db } from '../firebase';
 import styles from './TaskList.module.css';
 export const TaskList = () => {
-	const [tasks, setTasks] = useState([]);
 	const [sortTasks, setSortTasks] = useState(false);
 	const [editingTitle, setEditingTitle] = useState('');
 	const [editingNum, setEditingNum] = useState('0');
 	const [inputValue, setInputValue] = useState();
-	const [isLoading, setIsLoading] = useState(false);
-	const [isCreating, setIsCreating] = useState(false);
+
 	const [isDeleting, setIsDeleting] = useState(false);
 	const [isEditing, setIsEditing] = useState(false);
 	const [refreshTasks, setRefreshTasks] = useState(false);
-	useEffect(() => {
-		setIsLoading(true);
 
-		fetch('http://localhost:3004/tasks')
-			.then((loadedData) => loadedData.json())
-			.then((loadedTasks) => {
-				if (sortTasks) {
-					const sortedTasks = loadedTasks.sort(function (a, b) {
-						if (a.title < b.title) {
-							return -1;
-						}
-						if (a.title > b.title) {
-							return 1;
-						}
-						return 0;
-					});
-					setTasks(sortedTasks);
-				} else {
-					setTasks(loadedTasks);
-				}
-			})
-			.finally(() => setIsLoading(false));
-	}, [refreshTasks]);
+	const { isLoading, tasks } = useRequestGetTasks(sortTasks);
+	const { isCreating, requestAddTask } = useRequestAddTask(tasks, inputValue);
 
-	const requestAddTask = () => {
-		setIsCreating(true);
-		const nextId = Number(tasks[tasks.length - 1].id) + 1;
-		fetch('http://localhost:3004/tasks', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json;charset=utf-8' },
-			body: JSON.stringify({
-				userId: '1',
-				id: String(nextId),
-				title: inputValue,
-				completed: false,
-			}),
-		})
-			.then((rawResponse) => rawResponse.json())
-			.then((response) => {
-				console.log('Task addded, responce:', response);
-				setRefreshTasks(!refreshTasks);
-			})
-			.finally(() => setIsCreating(false));
-	};
 	const requestDeleteTask = (target) => {
 		setIsDeleting(true);
-		fetch(`http://localhost:3004/tasks/${target.id}/`, {
-			method: 'DELETE',
-		})
-			.then((rawResponse) => rawResponse.json())
+		const taskDbRef = ref(db, `tasks//${target.id}`);
+		remove(taskDbRef)
 			.then((response) => {
 				setRefreshTasks(!refreshTasks);
 			})
 			.finally(() => setIsDeleting(false));
 	};
 	const requestUpdateTask = (target) => {
-		fetch(`http://localhost:3004/tasks/${editingNum}/`, {
-			method: 'PUT',
-			headers: { 'Content-Type': 'application/json;charset=utf-8' },
-			body: JSON.stringify({
-				userId: '1',
-				id: editingNum,
-				title: editingTitle,
-				completed: false,
-			}),
+		const taskDbRef = ref(db, `tasks/${editingNum}`);
+		set(taskDbRef, {
+			userId: '1',
+			title: editingTitle,
+			completed: false,
 		})
-			.then((rawResponse) => rawResponse.json())
 			.then((response) => {
-				setRefreshTasks(!refreshTasks);
+				console.log('');
 			})
 			.finally(() => {
 				setEditingNum('0');
@@ -115,21 +70,21 @@ export const TaskList = () => {
 				{isLoading ? (
 					<div className="loader"></div>
 				) : (
-					tasks.map((item) => (
-						<li key={item.id}>
+					Object.entries(tasks).map(([id, { userId, title, completed }]) => (
+						<li key={id}>
 							<button
 								className={styles.edit}
-								id={item.id}
+								id={id}
 								disabled={isEditing}
 								onClick={({ target }) => enableEditor(target)}
 							>
 								E
 							</button>
-							<p>{item.title}</p>
+							<p>{title}</p>
 
 							<button
 								className={styles.close}
-								id={item.id}
+								id={id}
 								disabled={isDeleting}
 								onClick={({ target }) => requestDeleteTask(target)}
 							>
