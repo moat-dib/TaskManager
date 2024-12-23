@@ -27,13 +27,16 @@
 .list {
 	margin: 0;
 	padding: 0;
+	list-style-type: none;
 }
 
 /* Стиль элементов списка */
 .list li {
+	display: flex;
+	flex-direction: row;
 	cursor: pointer;
 	position: relative;
-	padding: 12px 8px 12px 40px;
+
 	list-style-type: none;
 	background: #eee;
 	font-size: 18px;
@@ -45,7 +48,10 @@
 	-ms-user-select: none;
 	user-select: none;
 }
-
+.list li p {
+	margin-left: 70px;
+	width: 85%;
+}
 /* Установите для всех нечетных элементов списка другой цвет (полосы зебры) */
 .list li:nth-child(odd) {
 	background: #f9f9f9;
@@ -82,20 +88,39 @@
 	position: absolute;
 	right: 0;
 	top: 0;
-	padding: 12px 16px 12px 16px;
+	padding: 2px 6px 2px 6px;
 }
-
+.edit {
+	position: absolute;
+	left: 10px;
+	top: 15px;
+	width: 30px;
+	height: 30px;
+}
 .close:hover {
 	background-color: #f44336;
 	color: white;
 }
-
+.edit:hover {
+	position: absolute;
+	left: 5px;
+	top: 10px;
+	width: 40px;
+	height: 40px;
+	background-color: #5e99b4;
+	color: white;
+}
 /* Стиль заголовка */
-.header {
-	background-color: #078680;
+.header,
+.footer {
+	background-color: #5e99b4;
 	padding: 30px 40px;
 	color: white;
 	text-align: center;
+}
+.footer {
+	padding-top: 10px;
+	height: 100px;
 }
 
 /* Очистить поплавки после заголовка */
@@ -127,7 +152,7 @@ input {
 	font-size: 16px;
 	cursor: pointer;
 	transition: 0.3s;
-	border-radius: 0;
+	border: 0px;
 }
 .delBtn {
 	background-color: #e0aab3;
@@ -137,4 +162,13 @@ input {
 }
 .addBtn:hover {
 	background-color: #bbb;
+}
+.sortDiv {
+	background-color: #5e99b4;
+	color: white;
+	height: 50px;
+	display: block;
+	text-align: left;
+}
+.sortDiv {
 }
